@@ -1,4 +1,5 @@
 # Dependencies
+<<<<<<< HEAD
 node_modules/
 */node_modules/
 .mvn/
@@ -12,6 +13,19 @@ backend/target/
 
 # Environment variables
 .env
+=======
+/node_modules
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Production build
+/build
+
+# Environment variables
+>>>>>>> 40c22a5e4f33a6701bc4b81a494e4d93abd6aa3e
 .env.local
 .env.development.local
 .env.test.local
@@ -21,7 +35,10 @@ backend/target/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+<<<<<<< HEAD
 lerna-debug.log*
+=======
+>>>>>>> 40c22a5e4f33a6701bc4b81a494e4d93abd6aa3e
 
 # Runtime data
 pids
@@ -29,6 +46,7 @@ pids
 *.seed
 *.pid.lock
 
+<<<<<<< HEAD
 # Coverage directory used by tools like istanbul
 coverage/
 *.lcov
@@ -87,10 +105,14 @@ tmp/
 temp/
 
 # Editor directories and files
+=======
+# IDE
+>>>>>>> 40c22a5e4f33a6701bc4b81a494e4d93abd6aa3e
 .vscode/
 .idea/
 *.swp
 *.swo
+<<<<<<< HEAD
 *~
 
 # Source directories (exclude all src directories except for specific ones)
@@ -115,6 +137,10 @@ temp/
 !.vscode/extensions.json
 
 # OS generated files
+=======
+
+# OS
+>>>>>>> 40c22a5e4f33a6701bc4b81a494e4d93abd6aa3e
 .DS_Store
 .DS_Store?
 ._*
@@ -123,6 +149,12 @@ temp/
 ehthumbs.db
 Thumbs.db
 
+<<<<<<< HEAD
 # AWS deployment files
 *.zip
 backend-deployment.zip
+=======
+# Temporary files
+*.tmp
+*.temp
+>>>>>>> 40c22a5e4f33a6701bc4b81a494e4d93abd6aa3e
