@@ -1,40 +1,58 @@
 # Build stage
-FROM maven:3.8.6-amazoncorretto-17 AS build
+FROM maven:3.8.6-openjdk-17-slim AS build
 
-# Set working directory
 WORKDIR /app
 
-# First, copy only the pom.xml and download dependencies
+# Create settings.xml with reliable mirrors
+RUN mkdir -p /root/.m2 && \
+    echo '<?xml version="1.0" encoding="UTF-8"?><settings>\
+    <mirrors>\
+        <mirror>\
+            <id>maven-central</id>\
+            <url>https://repo1.maven.org/maven2</url>\
+            <mirrorOf>central</mirrorOf>\
+        </mirror>\
+    </mirrors>\
+    <profiles>\
+        <profile>\
+            <id>default</id>\
+            <activation>\
+                <activeByDefault>true</activeByDefault>\
+            </activation>\
+            <repositories>\
+                <repository>\
+                    <id>central</id>\
+                    <url>https://repo1.maven.org/maven2</url>\
+                    <releases><enabled>true</enabled></releases>\
+                    <snapshots><enabled>false</enabled></snapshots>\
+                </repository>\
+            </repositories>\
+        </profile>\
+    </profiles>\
+    </settings>' > /root/.m2/settings.xml
+
+# Show Maven version for debugging
+RUN mvn --version
+
+# Copy only the POM file first (for better caching)
 COPY pom.xml .
-COPY mvnw .
-COPY .mvn .mvn
 
-# Download dependencies (this step is cached)
-RUN ./mvnw dependency:go-offline -B
+# Download dependencies with debug info
+RUN mvn -X dependency:resolve
 
-# Then copy the source code
-COPY src/ /app/src/
+# Copy source code
+COPY src ./src
 
-# Build the application
-RUN ./mvnw clean package -DskipTests
+# Build the application with debug info
+RUN mvn -X clean package -DskipTests
 
 # Runtime stage
-FROM amazoncorretto:17-alpine
+FROM openjdk:17-slim
 
-# Install required packages
-RUN apk add --no-cache tzdata
-
-# Set timezone
-ENV TZ=Asia/Kolkata
-
-# Create app directory
 WORKDIR /app
 
-# Copy the built WAR file from the build stage
-COPY --from=build /app/target/*.war /app/app.war
-
-# Make sure the file was copied correctly
-RUN ls -la /app/
+# Copy the built WAR file
+COPY --from=build /app/target/*.war app.war
 
 # Expose port
 EXPOSE 8080
@@ -44,4 +62,4 @@ ENV JAVA_OPTS="-Xmx512m -Xms256m"
 ENV SPRING_PROFILES_ACTIVE=prod
 
 # Run the application
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -Dserver.port=${PORT:-8080} -jar /app/app.war"]
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -Dserver.port=${PORT:-8080} -jar app.war"]
