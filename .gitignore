@@ -1,31 +1,22 @@
 # Dependencies
-<<<<<<< HEAD
 node_modules/
 */node_modules/
 .mvn/
 .m2/
 target/
 build/
+.pnp
+.pnp.js
 
 # Production builds
 frontend/build/
 backend/target/
 
-# Environment variables
-.env
-=======
-/node_modules
-/.pnp
-.pnp.js
-
 # Testing
 /coverage
 
-# Production build
-/build
-
 # Environment variables
->>>>>>> 40c22a5e4f33a6701bc4b81a494e4d93abd6aa3e
+.env
 .env.local
 .env.development.local
 .env.test.local
@@ -35,10 +26,7 @@ backend/target/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-<<<<<<< HEAD
 lerna-debug.log*
-=======
->>>>>>> 40c22a5e4f33a6701bc4b81a494e4d93abd6aa3e
 
 # Runtime data
 pids
@@ -46,7 +34,6 @@ pids
 *.seed
 *.pid.lock
 
-<<<<<<< HEAD
 # Coverage directory used by tools like istanbul
 coverage/
 *.lcov
