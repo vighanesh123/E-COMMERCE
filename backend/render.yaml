@@ -2,15 +2,20 @@ services:
   - type: web
     name: electronics-ecommerce-backend
     env: java
+    region: singapore  # Choose the region closest to your users
+    plan: free  # Or 'starter' if you have a paid plan
     buildCommand: ./mvnw clean package -DskipTests
-    startCommand: java -jar target/ecommerce-backend-0.0.1-SNAPSHOT.jar
+    startCommand: java -jar target/ecommerce-backend-0.0.1-SNAPSHOT.jar --server.port=$PORT
     healthCheckPath: /api/health
+    autoDeploy: true  # Automatically deploy on every push to the main branch
     envVars:
       - key: MONGODB_URI
-        value: mongodb+srv://vighneshdabare2004:2JdbEcZ1QHDfX399@cluster0.t11fhsz.mongodb.net/electronics_ecommerce?retryWrites=true&w=majority&appName=Cluster0
+        value: ${MONGODB_URI}  # Use environment variable for security
       - key: JWT_SECRET
-        value: mySuperSecretKeyThatIsLongEnoughForJWT256BitsSecurityRequirements
+        generateValue: true  # Let Render generate a secure secret
       - key: SPRING_PROFILES_ACTIVE
         value: prod
-      - key: PORT
-        value: 8080
+      - key: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
+        value: https://electronics-ecommerce-backend.onrender.com  # Update after deployment
+      - key: SERVER_SERVLET_CONTEXT_PATH
+        value: /api  # Add API base path if needed
