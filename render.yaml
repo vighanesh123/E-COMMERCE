@@ -16,6 +16,10 @@ services:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
       - key: SERVER_PORT
-        value: "8080"
+        value: "10000"  # Render's default internal port
       - key: SPRING_DATA_MONGODB_URI
         sync: false
+      - key: JAVA_OPTS
+        value: "-Xmx512m -Xms256m"
+    buildCommand: ""
+    startCommand: ""
