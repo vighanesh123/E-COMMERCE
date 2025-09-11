@@ -1,0 +1,37 @@
+# Node dependencies
+node_modules
+
+# Java build artifacts
+target
+*.jar
+*.war
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+
+# Git files
+.git
+.gitignore
+
+# Environment files
+.env
+
+# IDE specific files
+.idea
+.vscode
+
+# Frontend build files
+frontend/build
+frontend/node_modules
+
+# Backend specific
+backend/target
+backend/*.log
+
+# Maven wrapper (not needed in container)
+.mvn/
+mvnw
+mvnw.cmd
