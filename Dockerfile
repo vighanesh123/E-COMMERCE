@@ -4,13 +4,13 @@ FROM maven:3.8.6-openjdk-17 AS build
 WORKDIR /app
 
 # Copy Maven settings with reliable mirrors
-COPY backend/settings.xml /usr/share/maven/conf/settings.xml
+COPY settings.xml /usr/share/maven/conf/settings.xml
 
 # Set Maven options for better reliability
 ENV MAVEN_OPTS="-Dmaven.wagon.http.retryHandler.count=3 -Dmaven.wagon.http.retryHandler.interval=10000 -Dmaven.wagon.httpconnectionManager.ttlSeconds=30"
 
 # Copy only the POM file first (for better caching)
-COPY backend/pom.xml .
+COPY pom.xml .
 
 # Function to retry Maven commands
 RUN echo 'function mvn_with_retry() { \
@@ -36,7 +36,7 @@ RUN echo 'function mvn_with_retry() { \
 RUN . ~/.bashrc && mvn_with_retry dependency:go-offline -B -U
 
 # Copy source code
-COPY backend/src ./src
+COPY src ./src
 
 # Build the application with retry logic
 RUN . ~/.bashrc && mvn_with_retry clean package -DskipTests
