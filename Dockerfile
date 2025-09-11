@@ -3,54 +3,43 @@ FROM maven:3.8.6-openjdk-17-slim AS build
 
 WORKDIR /app
 
-# Configure Maven with reliable mirrors and retry logic
-RUN mkdir -p /root/.m2 && \
-    echo '<?xml version="1.0" encoding="UTF-8"?><settings>\
-    <mirrors>\
-        <mirror>\
-            <id>central</id>\
-            <name>Maven Central</name>\
-            <url>https://repo1.maven.org/maven2</url>\
-            <mirrorOf>central</mirrorOf>\
-        </mirror>\
-        <mirror>\
-            <id>google-maven-central</id>\
-            <name>Google Maven Central Mirror</name>\
-            <url>https://maven-central.storage-download.googleapis.com/maven2/</url>\
-            <mirrorOf>central</mirrorOf>\
-        </mirror>\
-    </mirrors>\
-    <profiles>\
-        <profile>\
-            <id>default</id>\
-            <activation><activeByDefault>true</activeByDefault></activation>\
-            <repositories>\
-                <repository>\
-                    <id>central</id>\
-                    <url>https://repo1.maven.org/maven2</url>\
-                    <releases><enabled>true</enabled></releases>\
-                    <snapshots><enabled>false</enabled></snapshots>\
-                </repository>\
-            </repositories>\
-        </profile>\
-    </profiles>\
-    </settings>' > /root/.m2/settings.xml
+# Copy Maven settings with reliable mirrors
+COPY backend/settings.xml /usr/share/maven/conf/settings.xml
+
+# Set Maven options for better reliability
+ENV MAVEN_OPTS="-Dmaven.wagon.http.retryHandler.count=3 -Dmaven.wagon.http.retryHandler.interval=10000 -Dmaven.wagon.httpconnectionManager.ttlSeconds=30"
 
 # Copy only the POM file first (for better caching)
 COPY backend/pom.xml .
 
+# Function to retry Maven commands
+RUN echo 'function mvn_with_retry() { \
+    local max_attempts=3 \
+    local attempt=1 \
+    local exit_code=0 \
+    while [ $attempt -le $max_attempts ]; do \
+        echo "Attempt $attempt of $max_attempts: $@"; \
+        if mvn "$@"; then \
+            exit_code=0; \
+            break; \
+        else \
+            exit_code=$?; \
+            echo "Attempt $attempt failed with status $exit_code"; \
+            sleep $((attempt * 10)); \
+            attempt=$((attempt + 1)); \
+        fi; \
+    done; \
+    return $exit_code \
+}' >> ~/.bashrc
+
 # Download dependencies with retry logic
-RUN mvn dependency:go-offline -B || \
-    (echo "First attempt failed, retrying..." && sleep 10 && mvn dependency:go-offline -B) || \
-    (echo "Second attempt failed, retrying one more time..." && sleep 20 && mvn dependency:go-offline -B)
+RUN . ~/.bashrc && mvn_with_retry dependency:go-offline -B -U
 
 # Copy source code
 COPY backend/src ./src
 
 # Build the application with retry logic
-RUN mvn clean package -DskipTests || \
-    (echo "First build attempt failed, retrying..." && sleep 10 && mvn clean package -DskipTests) || \
-    (echo "Second build attempt failed, retrying one more time..." && sleep 20 && mvn clean package -DskipTests)
+RUN . ~/.bashrc && mvn_with_retry clean package -DskipTests
 
 # Runtime stage
 FROM openjdk:17-slim
