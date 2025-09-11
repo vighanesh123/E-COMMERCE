@@ -3,48 +3,17 @@ FROM maven:3.8.6-openjdk-17-slim AS build
 
 WORKDIR /app
 
-# Create settings.xml with reliable mirrors
-RUN mkdir -p /root/.m2 && \
-    echo '<?xml version="1.0" encoding="UTF-8"?><settings>\
-    <mirrors>\
-        <mirror>\
-            <id>maven-central</id>\
-            <url>https://repo1.maven.org/maven2</url>\
-            <mirrorOf>central</mirrorOf>\
-        </mirror>\
-    </mirrors>\
-    <profiles>\
-        <profile>\
-            <id>default</id>\
-            <activation>\
-                <activeByDefault>true</activeByDefault>\
-            </activation>\
-            <repositories>\
-                <repository>\
-                    <id>central</id>\
-                    <url>https://repo1.maven.org/maven2</url>\
-                    <releases><enabled>true</enabled></releases>\
-                    <snapshots><enabled>false</enabled></snapshots>\
-                </repository>\
-            </repositories>\
-        </profile>\
-    </profiles>\
-    </settings>' > /root/.m2/settings.xml
-
-# Show Maven version for debugging
-RUN mvn --version
-
 # Copy only the POM file first (for better caching)
 COPY backend/pom.xml .
 
-# Download dependencies with debug info
-RUN mvn -X dependency:resolve
+# Download dependencies
+RUN mvn dependency:go-offline -B
 
 # Copy source code
 COPY backend/src ./src
 
-# Build the application with debug info
-RUN mvn -X clean package -DskipTests
+# Build the application
+RUN mvn clean package -DskipTests
 
 # Runtime stage
 FROM openjdk:17-slim
