@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { OrderProvider } from './context/OrderContext';
@@ -21,6 +21,22 @@ import OrderSuccess from './pages/OrderSuccess';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
+  return (
+    <Router>
+      <ToastProvider>
+        <AuthProvider>
+          <CartProvider>
+            <OrderProvider>
+              <AppContent />
+            </OrderProvider>
+          </CartProvider>
+        </AuthProvider>
+      </ToastProvider>
+    </Router>
+  );
+}
+
+const AppContent = () => {
   const location = useLocation();
 
   // Show Navbar on specific routes
@@ -37,14 +53,10 @@ function App() {
   const shouldShowFooter = location.pathname === '/';
 
   return (
-    <ToastProvider>
-      <AuthProvider>
-        <CartProvider>
-          <OrderProvider>
-            <div className="min-h-screen bg-gray-50">
-              {shouldShowNavbar && <Navbar />}
-              <main>
-            <Routes>
+    <div className="min-h-screen bg-gray-50">
+      {shouldShowNavbar && <Navbar />}
+      <main className="pt-16">
+        <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<Products />} />
             <Route path="/products/category/:category" element={<Products />} />
@@ -100,14 +112,10 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-            </Routes>
-            </main>
-            {shouldShowFooter && <Footer />}
-            </div>
-          </OrderProvider>
-        </CartProvider>
-      </AuthProvider>
-    </ToastProvider>
+        </Routes>
+      </main>
+      {shouldShowFooter && <Footer />}
+    </div>
   );
 }
 
