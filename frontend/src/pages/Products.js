@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import SearchBar from '../components/SearchBar';
@@ -342,7 +342,7 @@ const Products = () => {
 
   useEffect(() => {
     filterProducts();
-  }, [products, searchQuery]);
+  }, [products, searchQuery, filterProducts]);
 
   const fetchProducts = async () => {
     try {
@@ -482,7 +482,7 @@ const Products = () => {
     }
   };
 
-  const filterProducts = () => {
+  const filterProducts = useCallback(() => {
     let filtered = [...products];
 
     // Always add sample products to ensure we have products to display
@@ -702,7 +702,7 @@ const Products = () => {
     console.log('Phones in filtered products:', filtered.filter(p => p.category === 'Phone').length);
     
     setFilteredProducts(filtered);
-  };
+  }, [products, searchQuery, selectedCategory, selectedBrand, priceRange, sortBy]);
 
   const handleSearch = (query) => {
     setSearchQuery(query);
