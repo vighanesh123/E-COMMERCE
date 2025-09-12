@@ -326,6 +326,10 @@ const Products = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedBrand, setSelectedBrand] = useState(null);
+  const [priceRange, setPriceRange] = useState([0, 10000]);
+  const [sortBy, setSortBy] = useState('name');
 
   useEffect(() => {
     fetchProducts();
@@ -702,7 +706,7 @@ const Products = () => {
     console.log('Phones in filtered products:', filtered.filter(p => p.category === 'Phone').length);
     
     setFilteredProducts(filtered);
-  }, [products, searchQuery]);
+  }, [products, searchQuery, selectedCategory, selectedBrand, priceRange, sortBy]);
 
   const handleSearch = (query) => {
     setSearchQuery(query);
