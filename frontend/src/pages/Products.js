@@ -702,7 +702,7 @@ const Products = () => {
     console.log('Phones in filtered products:', filtered.filter(p => p.category === 'Phone').length);
     
     setFilteredProducts(filtered);
-  }, [products, searchQuery, selectedCategory, selectedBrand, priceRange, sortBy]);
+  }, [products, searchQuery]);
 
   const handleSearch = (query) => {
     setSearchQuery(query);
