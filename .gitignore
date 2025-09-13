@@ -1,4 +1,5 @@
 # Dependencies
+<<<<<<< HEAD
 /node_modules
 /.pnp
 .pnp.js
@@ -11,6 +12,26 @@
 
 # Misc
 .DS_Store
+=======
+node_modules/
+*/node_modules/
+.mvn/
+.m2/
+target/
+build/
+.pnp
+.pnp.js
+
+# Production builds
+frontend/build/
+backend/target/
+
+# Testing
+/coverage
+
+# Environment variables
+.env
+>>>>>>> dcad0ac4e8acf6c16e0dc951f9e92a36ea388908
 .env.local
 .env.development.local
 .env.test.local
@@ -20,6 +41,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+<<<<<<< HEAD
 
 # IDE
 .vscode/
@@ -27,3 +49,124 @@ yarn-error.log*
 
 # OS
 Thumbs.db
+=======
+lerna-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env.test
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# Next.js build output
+.next
+
+# Nuxt.js build / generate output
+.nuxt
+dist
+
+# Gatsby files
+.cache/
+# public
+
+# Storybook build outputs
+.out
+.storybook-out
+
+# Temporary folders
+tmp/
+temp/
+
+# Editor directories and files
+=======
+# IDE
+>>>>>>> 40c22a5e4f33a6701bc4b81a494e4d93abd6aa3e
+.vscode/
+.idea/
+*.swp
+*.swo
+<<<<<<< HEAD
+*~
+
+# Source directories (exclude all src directories except for specific ones)
+# Add specific src directories you want to track in your repository
+# For example:
+# !/path/to/specific/src/dir/
+
+# Maven wrapper
+.mvn/wrapper/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# OS generated files
+=======
+
+# OS
+>>>>>>> 40c22a5e4f33a6701bc4b81a494e4d93abd6aa3e
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+<<<<<<< HEAD
+# AWS deployment files
+*.zip
+backend-deployment.zip
+=======
+# Temporary files
+*.tmp
+*.temp
+>>>>>>> 40c22a5e4f33a6701bc4b81a494e4d93abd6aa3e
+>>>>>>> dcad0ac4e8acf6c16e0dc951f9e92a36ea388908

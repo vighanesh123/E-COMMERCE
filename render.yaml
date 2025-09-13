@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: electronics-ecommerce-backend
+    env: docker
+    region: singapore
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: MONGODB_URI
+        value: ${MONGODB_URI}
+      - key: JWT_SECRET
+        generateValue: true
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SERVER_PORT
+        value: "10000"  # Render's default internal port
+      - key: JAVA_OPTS
+        value: "-Xmx512m -Xms256m"
+    buildCommand: ""
+    startCommand: ""
