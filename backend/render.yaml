@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: electronics-ecommerce-backend
+    env: java
+    buildCommand: ./mvnw clean package -DskipTests
+    startCommand: java -jar target/ecommerce-backend-0.0.1-SNAPSHOT.jar
+    plan: free
+    envVars:
+      - key: MONGODB_URI
+        value: mongodb+srv://vighneshdabare2004:2JdbEcZ1QHDfX399@cluster0.t11fhsz.mongodb.net/electronics_ecommerce?retryWrites=true&w=majority&appName=Cluster0
+      - key: JWT_SECRET
+        value: mySuperSecretKeyThatIsLongEnoughForJWT256BitsSecurityRequirements
+      - key: JWT_EXPIRATION
+        value: 86400
+      - key: PORT
+        value: 8080
