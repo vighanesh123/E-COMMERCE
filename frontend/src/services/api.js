@@ -3,7 +3,7 @@ import axios from 'axios';
 // Environment-based API URL configuration
 const getApiBaseUrl = () => {
   if (process.env.NODE_ENV === 'production') {
-    return process.env.REACT_APP_API_URL || 'https://your-render-app.onrender.com/api';
+    return process.env.REACT_APP_API_URL || 'https://e-commerce-f5rq.onrender.com/api';
   }
   return 'http://localhost:8080/api';
 };
